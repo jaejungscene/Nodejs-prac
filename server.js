@@ -50,5 +50,5 @@ app.get("/products/:id", (req,res)=>{
 })
 
 app.listen(port, ()=>{
-    console.log("그랩의 쇼핑몰 서버가 돌아가고 있습니다.");
+    console.log("그랩의 쇼핑몰 서버가 돌아가고 있습니다...");
 })
