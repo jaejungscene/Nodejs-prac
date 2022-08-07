@@ -45,8 +45,8 @@ app.post("/products", (req,res)=>{
 
 app.get("/products/:id", (req,res)=>{
     const params = req.params;
-    const {id} = p
-    res.send(`id는 ${params.id}입니다.`);
+    const {id} = params;
+    res.send(`id는 ${id}입니다.`);
 })
 
 app.listen(port, ()=>{
