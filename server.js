@@ -39,6 +39,16 @@ app.get("/products", (req, res)=>{
 
 app.post("/products", (req,res)=>{
     const body = req.body;
+    const {name, description, price, seller} = body;
+    models.Products.create({
+        name, description,
+        price, seller
+    }).then((result)=>{
+
+    }).catch((error)=>{
+        console.error(error);
+        res.send("상품 ")
+    })
     res.send({
         "body": body
     });
