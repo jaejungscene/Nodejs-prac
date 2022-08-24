@@ -44,10 +44,13 @@ app.post("/products", (req,res)=>{
         name, description,
         price, seller
     }).then((result)=>{
-
+        console.log("상품생성 결과:",result);
+        res.send({
+            result,
+        });
     }).catch((error)=>{
         console.error(error);
-        res.send("상품 ")
+        res.send("상품 업로드에 문제가 발생했습니다.");
     })
     res.send({
         "body": body
