@@ -40,9 +40,14 @@ app.get("/products", (req, res)=>{
 app.post("/products", (req,res)=>{
     const body = req.body;
     const {name, description, price, seller} = body;
+    if(!name || !description || !price || !seller){
+        res.send("모든 필드를 입력해주세요.");
+    }
     models.Products.create({
-        name, description,
-        price, seller
+        name,
+        description,
+        price,
+        seller,
     }).then((result)=>{
         console.log("상품생성 결과:",result);
         res.send({
@@ -51,9 +56,6 @@ app.post("/products", (req,res)=>{
     }).catch((error)=>{
         console.error(error);
         res.send("상품 업로드에 문제가 발생했습니다.");
-    })
-    res.send({
-        "body": body
     });
 })
 
