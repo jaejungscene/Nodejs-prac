@@ -1,11 +1,23 @@
 const express = require('express');
 const cors = require('cors');
 const models = require('./models');
+const multer = require('multer');
+const upload = multer({
+    storage: multer.diskStorage({
+        destination: function(req, file, cb){
+            cb(null, "upload/") // setting destination folder
+        },
+        filename: function(req,file,cb){
+            cb(null, file.originalname); // make name of image file as ofiginal name
+        },
+    })
+}); // designate where the file to be upload
 const app = express();
 const port = 8080;
 
 app.use(express.json());
 app.use(cors());
+app.use("/upload", express.static("upload"));
 
 // get all products
 app.get("/products", (req, res)=>{
@@ -30,6 +42,22 @@ app.get("/products", (req, res)=>{
         console.error(error);
         res.send("error occur");
     });
+});
+
+app.put("/products/1",(req, res)=>{
+    models.Product.put({
+        where:{
+            id:id
+        }
+    })
+})
+
+app.post('/image', upload.single('image'), (req,res)=>{
+    const file = req.file;
+    console.log(file);
+    res.send({
+        imageUrl : file.path
+    })
 });
 
 app.post("/products", (req,res)=>{
