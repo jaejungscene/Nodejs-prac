@@ -1,3 +1,4 @@
 # practice about node.js server
 
-## used Express framework ([see here](https://expressjs.com/))
+* used Framwork: Express framework ([see here](https://expressjs.com/))
+* used Database: sequelilze
