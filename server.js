@@ -1,7 +1,15 @@
 const express = require('express');
 const cors = require('cors');
 const models = require('./models');
+const app = express();
+app.use(express.json());
+app.use(cors());
+app.use("/upload", express.static("upload"));
+const port = 8080;
 const multer = require('multer');
+
+
+/*********** Storage server **********/
 const upload = multer({
     storage: multer.diskStorage({
         destination: function(req, file, cb){
@@ -12,13 +20,19 @@ const upload = multer({
         },
     })
 }); // designate where the file to be upload
-const app = express();
-const port = 8080;
 
-app.use(express.json());
-app.use(cors());
-app.use("/upload", express.static("upload"));
+app.post('/images', upload.single('image'), (req,res)=>{
+    const file = req.file;
+    console.log(file);
+    res.send({
+        imageUrl : file.path
+    })
+});
+/***********************************/
 
+
+
+/*********** API server ************/
 // get all products
 app.get("/products", (req, res)=>{
     models.Product.findAll({ // find data in database
@@ -42,15 +56,6 @@ app.get("/products", (req, res)=>{
         console.error(error);
         res.send("error occur");
     });
-});
-
-
-app.post('/images', upload.single('image'), (req,res)=>{
-    const file = req.file;
-    console.log(file);
-    res.send({
-        imageUrl : file.path
-    })
 });
 
 app.post("/products", (req,res)=>{
