@@ -1,12 +1,12 @@
 const express = require('express');
 const cors = require('cors');
-const models = require('./models');
+const models = require('./models'); // import SQLite
 const app = express();
 app.use(express.json());
 app.use(cors());
 app.use("/upload", express.static("upload"));
 const port = 8080;
-const multer = require('multer');
+const multer = require('multer'); // Multer is a node.js middleware for handling multipart/form-data, which is primarily used for uploading files
 
 
 /*********** Storage server **********/
@@ -16,7 +16,7 @@ const upload = multer({
             cb(null, "upload/") // setting destination folder
         },
         filename: function(req,file,cb){
-            cb(null, file.originalname); // make name of image file as ofiginal name
+            cb(null, file.originalname); // make name of image file as original name
         },
     })
 }); // designate where the file to be upload
@@ -33,6 +33,19 @@ app.post('/images', upload.single('image'), (req,res)=>{
 
 
 /*********** API server ************/
+app.listen(port, ()=>{
+    console.log("그랩의 쇼핑몰 서버가 돌아가고 있습니다");
+    models.sequelize.sync()
+    .then(()=>{
+        console.log('DB 연결 성공!');
+    })
+    .catch((err)=>{
+        console.error(err);
+        console.log('DB 연결 에러');
+        process.exit();
+    });
+})
+
 // get all products
 app.get("/products", (req, res)=>{
     models.Product.findAll({ // find data in database
@@ -99,15 +112,3 @@ app.get("/products/:id", (req,res)=>{
     });
 });
 
-app.listen(port, ()=>{
-    console.log("그랩의 쇼핑몰 서버가 돌아가고 있습니다");
-    models.sequelize.sync()
-    .then(()=>{
-        console.log('DB 연결 성공!');
-    })
-    .catch((err)=>{
-        console.error(err);
-        console.log('DB 연결 에러');
-        process.exit();
-    });
-})
